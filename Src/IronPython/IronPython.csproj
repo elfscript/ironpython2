@@ -35,7 +35,13 @@
     <None Update="Lib\**\*.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\StdLib\Lib\__future__.py" Link="Lib\__future__.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\StdLib\Lib\os.py" Link="Lib\os.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\StdLib\Lib\runpy.py" Link="Lib\runpy.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -45,19 +51,19 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.1">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.3">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19367-01" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(IsFullFramework)' == 'false' ">
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.1" />
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' or '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.6.0" />
   </ItemGroup>
 
   <Import Project="$(AfterTargetFiles)" />

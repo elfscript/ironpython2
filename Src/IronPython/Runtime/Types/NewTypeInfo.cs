@@ -61,11 +61,11 @@ namespace IronPython.Runtime.Types {
 
                 if (curTypeToExtend == null || typeof(BuiltinFunction).IsAssignableFrom(curTypeToExtend) || typeof(PythonFunction).IsAssignableFrom(curTypeToExtend))
                     throw PythonOps.TypeError(typeName + ": {0} is not an acceptable base type", curBasePythonType.Name);
-                if (curTypeToExtend.ContainsGenericParameters())
+                if (curTypeToExtend.ContainsGenericParameters)
                     throw PythonOps.TypeError(typeName + ": cannot inhert from open generic instantiation {0}. Only closed instantiations are supported.", curBasePythonType);
 
                 foreach (Type interfaceType in baseInterfaces) {
-                    if (interfaceType.ContainsGenericParameters())
+                    if (interfaceType.ContainsGenericParameters)
                         throw PythonOps.TypeError(typeName + ": cannot inhert from open generic instantiation {0}. Only closed instantiations are supported.", interfaceType);
 
                     // collecting all the interfaces because we override them all.
@@ -100,8 +100,7 @@ namespace IronPython.Runtime.Types {
         /// </summary>
         private static IEnumerable<PythonType> GetPythonTypes(string typeName, ICollection<object> bases) {
             foreach (object curBaseType in bases) {
-                PythonType curBasePythonType = curBaseType as PythonType;
-                if (curBasePythonType == null) {
+                if (!(curBaseType is PythonType curBasePythonType)) {
                     if (curBaseType is OldClass)
                         continue;
                     throw PythonOps.TypeError(typeName + ": unsupported base type for new-style class " + curBaseType);
@@ -155,9 +154,7 @@ namespace IronPython.Runtime.Types {
         }
 
         public override bool Equals(object obj) {
-            NewTypeInfo other = obj as NewTypeInfo;
-            if (other == null) return false;
-
+            if (!(obj is NewTypeInfo other)) return false;
 
             if (_baseType.Equals(other._baseType) &&
                 _interfaceTypes.Count == other._interfaceTypes.Count) {

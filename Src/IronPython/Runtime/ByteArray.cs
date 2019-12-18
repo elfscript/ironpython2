@@ -1073,8 +1073,7 @@ namespace IronPython.Runtime {
                 //      integers, longs, etc... - fill in an array of 0 bytes
                 //      list of bytes, indexables, etc...
 
-                IList<byte> list = value as IList<byte>;
-                if (list == null) {
+                if (!(value is IList<byte> list)) {
                     int? iVal = null;
                     if (value is int) {
                         iVal = (int)value;
@@ -1290,19 +1289,20 @@ namespace IronPython.Runtime {
         }
 
         private static IList<byte>/*!*/ GetBytes(object/*!*/ value) {
-            ListGenericWrapper<byte> genWrapper = value as ListGenericWrapper<byte>;
-            if (genWrapper == null && value is IList<byte>) {
+            if (!(value is ListGenericWrapper<byte> genWrapper) && value is IList<byte>) {
                 return (IList<byte>)value;
             }
 
-            var strValue = value as string;
-            if (strValue != null) {
+            if (value is string strValue) {
                 return strValue.MakeByteArray();
             }
 
-            var esValue = value as Extensible<string>;
-            if (esValue != null) {
+            if (value is Extensible<string> esValue) {
                 return esValue.Value.MakeByteArray();
+            }
+
+            if (value is IBufferProtocol buffer) {
+                return buffer.ToBytes(0, null);
             }
 
             List<byte> ret = new List<byte>();

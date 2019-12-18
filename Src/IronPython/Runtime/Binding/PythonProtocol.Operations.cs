@@ -1257,7 +1257,7 @@ namespace IronPython.Runtime.Binding {
                         AstUtils.Constant(0),
                         BindingRestrictions.Combine(types)
                     );
-                } else if (yType.UnderlyingSystemType.IsPrimitive() || yType.UnderlyingSystemType == typeof(BigInteger)) {
+                } else if (yType.UnderlyingSystemType.IsPrimitive || yType.UnderlyingSystemType == typeof(BigInteger)) {
                     return new DynamicMetaObject(
                         AstUtils.Constant(-1),
                         BindingRestrictions.Combine(types)
@@ -2187,8 +2187,7 @@ namespace IronPython.Runtime.Binding {
                     PythonTypeSlot pts;
                     if (xType.TryResolveSlot(state.SharedContext, "__coerce__", out pts)) {
                         // don't call __coerce__ if it's declared on the base type
-                        BuiltinMethodDescriptor bmd = pts as BuiltinMethodDescriptor;
-                        if (bmd == null) return true;
+                        if (!(pts is BuiltinMethodDescriptor bmd)) return true;
 
                         if (bmd.__name__ != "__coerce__" &&
                             bmd.DeclaringType != typeof(int) &&

@@ -68,7 +68,7 @@ namespace IronPython.Runtime.Binding {
             Type exprType = expr.Type;
 
             if (toType == typeof(object)) {
-                if (exprType.IsValueType()) {
+                if (exprType.IsValueType) {
                     return AstUtils.Convert(expr, toType);
                 } else {
                     return expr;
@@ -98,8 +98,8 @@ namespace IronPython.Runtime.Binding {
         }
 
         internal static MethodInfo GetGenericConvertMethod(Type toType) {
-            if (toType.IsValueType()) {
-                if (toType.IsGenericType() && toType.GetGenericTypeDefinition() == typeof(Nullable<>)) {
+            if (toType.IsValueType) {
+                if (toType.IsGenericType && toType.GetGenericTypeDefinition() == typeof(Nullable<>)) {
                     return typeof(Converter).GetMethod("ConvertToNullableType");
                 } else {
                     return typeof(Converter).GetMethod("ConvertToValueType");
@@ -821,7 +821,7 @@ namespace IronPython.Runtime.Binding {
             if (attrs.Any()) {
                 lock (_dlrExtensionTypes) {
                     foreach (ExtensionTypeAttribute attr in attrs) {
-                        if (attr.Extends.IsInterface()) {
+                        if (attr.Extends.IsInterface) {
                             _registeredInterfaceExtensions = true;
                         }
 
@@ -1030,8 +1030,7 @@ namespace IronPython.Runtime.Binding {
                 #endregion
 
                 public override bool Equals(object obj) {
-                    CachedInfoKey other = obj as CachedInfoKey;
-                    if (other != null) {
+                    if (obj is CachedInfoKey other) {
                         return Equals(other);
                     }
 

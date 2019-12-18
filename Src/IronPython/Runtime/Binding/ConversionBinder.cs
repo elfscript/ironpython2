@@ -95,7 +95,7 @@ namespace IronPython.Runtime.Binding {
 
                 return (_kind == ConversionResultKind.ExplicitCast || _kind == ConversionResultKind.ImplicitCast) ?
                     Type :
-                    _type.IsValueType() ?
+                    _type.IsValueType ?
                         typeof(object) :
                         _type;
             }
@@ -215,7 +215,7 @@ namespace IronPython.Runtime.Binding {
                     break;
             }
 
-            if (type.IsEnum() && Enum.GetUnderlyingType(type) == self.GetLimitType()) {
+            if (type.IsEnum && Enum.GetUnderlyingType(type) == self.GetLimitType()) {
                 // numeric type to enum, this is ok if the value is zero
                 object value = Activator.CreateInstance(type);
 
@@ -563,8 +563,7 @@ namespace IronPython.Runtime.Binding {
         }
 
         public override bool Equals(object obj) {
-            PythonConversionBinder ob = obj as PythonConversionBinder;
-            if (ob == null) {
+            if (!(obj is PythonConversionBinder ob)) {
                 return false;
             }
 
@@ -621,8 +620,7 @@ namespace IronPython.Runtime.Binding {
             string strVal = self.Value as string;
             Expression strExpr = self.Expression;
             if (strVal == null) {
-                Extensible<string> extstr = self.Value as Extensible<string>;
-                if (extstr != null) {
+                if (self.Value is Extensible<string> extstr) {
                     strVal = extstr.Value;
                     strExpr =
                         Ast.Property(
@@ -700,7 +698,7 @@ namespace IronPython.Runtime.Binding {
             } else if (typeof(IStrongBox).IsAssignableFrom(self.GetLimitType())) {
                 // Explictly block conversion of References to bool
                 res = MakeStrongBoxToBoolConversionError(self);
-            } else if (self.GetLimitType().IsPrimitive() || self.GetLimitType().IsEnum()) {
+            } else if (self.GetLimitType().IsPrimitive || self.GetLimitType().IsEnum) {
                 // optimization - rather than doing a method call for primitives and enums generate
                 // the comparison to zero directly.
                 res = MakePrimitiveToBoolComparison(self);
